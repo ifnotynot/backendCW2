@@ -1,7 +1,7 @@
 {
     "author": {},
     "scripts":{
-        "start": "node products.js"
+        "start": "node product.js"
     },
     "dependencies": {
         "express": "^4.17.1",
