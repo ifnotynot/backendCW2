@@ -20,8 +20,8 @@ app.use((req, res, next) => {
 //Connect to mongodb
 const MongoClient = require('mongodb').MongoClient
 let db
-MongoClient.connect('mongodb+srv://root:Mijinyawass@cluster0.vjsdl.mongodb.net', (err, client)=>{
- db = client.db('web-store')
+MongoClient.connect('mongodb+srv://ifnotynot:Wiigames009@cluster0.yii15.mongodb.net', (err, client)=>{
+ db = client.db('cw2')
 })
  
 //display a message or root path to show that API is working
