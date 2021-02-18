@@ -1,5 +1,5 @@
 {
-    "author": {},
+    "author": "Tony",
     "scripts": {
         "start": "node product.js"
     },
