@@ -29,17 +29,17 @@ MongoClient.connect('mongodb+srv://ifnotynot:Wiigames009@cluster0.yii15.mongodb.
     db = client.db('cw2')
 })
 
+app.param('collectionName', (req, res, next, collectionName) => {
+    req.collection = db.collection(collectionName)
+    return next()
+})
+
 //display a message or root path to show that API is working
 app.get('/', (req, res, next) => {
     res.render("index.html");
     next();
 })
 
-//get collection
-app.param('collectionName', (req, res, next, collectionName) => {
-    req.collection = db.collection(collectionName)
-    return next()
-})
 
 //retrieve all the objects from collection
 app.get('/collection/:collectionName', (req, res, next) => {
