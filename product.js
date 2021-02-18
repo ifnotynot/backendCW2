@@ -9,15 +9,15 @@ const app = exp()
 
 //config express js
 app.use(exp.json())
-app.use(express.static("public"))
+app.use(exp.static("public"))
 
 const port = process.env.PORT || 3000
 
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Headers", "*");
-    res.setHeader('Access-Control-Allow-Methods', 'PUT');
     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept');
+    res.setHeader('Access-Control-Allow-Methods', 'PUT');
 
     next()
 })
@@ -50,8 +50,8 @@ app.get('/collection/:collectionName', (req, res, next) => {
 })
 //retrieve all the objects from collection
 app.post('/collection/:collectionName', (req, res, next) => {
-    req.collection.insert(req.body, (err,result)=>{
-        if(err) return next(err);
+    req.collection.insert(req.body, (err, result) => {
+        if (err) return next(err);
         res.send(result.ops);
     })
 })
@@ -61,8 +61,8 @@ app.get('/collection/:collectionName/:name/:phone', (req, res, next) => {
     req.collection.find({
         name: (req.params.name),
         phone: (req.params.phone)
-    }).toArray((e,result)=>{
-        if(e) return next(e)
+    }).toArray((e, result) => {
+        if (e) return next(e)
         res.send(result)
     })
 })
