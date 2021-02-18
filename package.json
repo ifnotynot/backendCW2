@@ -1,6 +1,6 @@
 {
     "author": {},
-    "scripts":{
+    "scripts": {
         "start": "node product.js"
     },
     "dependencies": {
