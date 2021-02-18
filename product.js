@@ -1,83 +1,73 @@
 //import modules
 const exp = require('express')
 const { ObjectID } = require('mongodb')
- 
+
 //const bodyParser = require('body-parser')
- 
+
 //create an express js instance
 const app = exp()
- 
+
 //config express js
 app.use(exp.json())
+app.use(express.static("public"))
+
 const port = process.env.PORT || 3000
+
+
 app.use((req, res, next) => {
- res.header("Access-Control-Allow-Headers", "*");
- res.setHeader('Access-Control-Allow-Origin', '*');
- 
- next()
+    res.header("Access-Control-Allow-Headers", "*");
+    res.setHeader('Access-Control-Allow-Methods', 'PUT');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    next()
 })
- 
+
 //Connect to mongodb
 const MongoClient = require('mongodb').MongoClient
 let db
-MongoClient.connect('mongodb+srv://ifnotynot:Wiigames009@cluster0.yii15.mongodb.net', (err, client)=>{
- db = client.db('cw2')
+MongoClient.connect('mongodb+srv://ifnotynot:Wiigames009@cluster0.yii15.mongodb.net', (err, client) => {
+    db = client.db('cw2')
 })
- 
+
 //display a message or root path to show that API is working
 app.get('/', (req, res, next) => {
- res.send('Select a collection, e.g., collection/messages')
+    res.render("index.html");
+    next();
 })
- 
+
 //get collection
-app.param('collectionName', (req, res, next, collectionName)=>{
- req.collection = db.collection(collectionName)
- return next()
+app.param('collectionName', (req, res, next, collectionName) => {
+    req.collection = db.collection(collectionName)
+    return next()
 })
- 
+
 //retrieve all the objects from collection
-app.get('/collection/:collectionName', (req, res, next)=>{
- req.collection.find({}).toArray((e, results)=>{
- if(e) return next(e)
- res.send(results)
- })
+app.get('/collection/:collectionName', (req, res, next) => {
+    req.collection.find({}).toArray((e, results) => {
+        if (e) return next(e)
+        res.send(results)
+    })
 })
- 
-//posting new data to the collection
-app.get('/collection/:collectionName/:id', (req, res, next) => { 
- req.collection.findOne(
- { _id: new ObjectID(req.params.id) }, 
- (e, result) => { 
- if (e) return next(e) 
- res.send(result) 
- }
- ) 
+//retrieve all the objects from collection
+app.post('/collection/:collectionName', (req, res, next) => {
+    req.collection.insert(req.body, (err,result)=>{
+        if(err) return next(err);
+        res.send(result.ops);
+    })
 })
- 
-//update object
-app.put('/collection/:collectionName/:id', (req, res, next) => {
- req.collection.update(
- {_id: new ObjectID(req.params.id)},
- {$set: req.body},
- {safe: true, multi: false},
- (e, result) => {
- if (e) return next(e)
- res.send((result.result.n === 1) ? {msg: 'success'} : {msg: 'error'})
- }
- )
+
+//retrieve customer orders by name and phone
+app.get('/collection/:collectionName/:name/:phone', (req, res, next) => {
+    req.collection.find({
+        name: (req.params.name),
+        phone: (req.params.phone)
+    }).toArray((e,result)=>{
+        if(e) return next(e)
+        res.send(result)
+    })
 })
- 
-//delete object
-app.delete('/collection/:collectionName/:id', (req, res, next) =>{
- req.collection.deleteOne(
- {_id: ObjectID(req.params.id)}, 
- (e, result) => {
- if (e) return next(e)
- res.send((result.result.n === 1) ? {msg: 'success'} : {msg: 'error'})
- }
- )
-})
- 
-app.listen(port, ()=>{
- console.log('Express js server runnning on localhost:3000')
+
+
+app.listen(port, () => {
+    console.log('Express js server runnning on localhost:3000')
 })
