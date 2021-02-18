@@ -30,7 +30,7 @@ MongoClient.connect('mongodb+srv://ifnotynot:Wiigames009@cluster0.yii15.mongodb.
 })
 
 app.param('collectionName', (req, res, next, collectionName) => {
-    req.collection = db.collection(collectionName)
+    req.collection = db.collection(collectionName);
     return next()
 })
 
